@@ -98,21 +98,49 @@ yargs.command({
 });
 
 yargs.command({
-    command: "toggle",
-    describe: "Toggle Incomplete/ Complete at a specific ID number",
-    handler: () => {
-        const data = loadData();
-        let x = process.argv[3]
-        for (let i = 0; i < data.length; i++) {
-            if (x == data[i].id + 1) {
-                data[i].status = !data[i].status;
-                // console.log("Gotcha!")
-            }
-            // console.log(data[i].id)
-            // console.log("X is", x)
+  command: "toggle",
+  describe: "Toggle Incomplete/ Complete at a specific ID number",
+  handler: () => {
+    const data = loadData();
+    let x = process.argv[3];
+    if (x) {
+      for (let i = 0; i < data.length; i++) {
+        if (x == data[i].id + 1) {
+          data[i].status = !data[i].status;
+          // console.log("Gotcha!")
         }
-        saveData(data)
+        // console.log(data[i].id)
+        // console.log("X is", x)
+      }
+    } else {
+      for (let i = 0; i < data.length; i++) {
+        data[i].status = !data[i].status;
+      }
     }
+
+    saveData(data);
+  },
 });
+
+yargs.command({
+  command: "delete",
+  describe: "Delete a specific to do thing by ID",
+  handler: () => {
+    const data = loadData();
+    let x = process.argv[3];
+    if (x) {
+      for (let i = 0; i < data.length;i++) {
+        if (x == data[i].id + 1) {
+          
+          for ( let j = i; j < data.length; j++) {
+            data[j].id--
+          }
+          data.splice(i, 1)
+        }
+      }
+    }
+    saveData(data)
+  }
+})
 
 yargs.parse();
