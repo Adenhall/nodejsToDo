@@ -1,6 +1,7 @@
 const fs = require("fs");
 const yargs = require("yargs");
 const chalk = require("chalk");
+const { describe } = require("yargs");
 
 const loadData = () => {
   const buffer = fs.readFileSync("data.json");
@@ -43,9 +44,9 @@ yargs.command({
   describe: "Add a new todo",
   builder: {
     id: {
-        describe: "Id number",
-        type: "number",
-        demandOption: false
+      describe: "Id number",
+      type: "number",
+      demandOption: false,
     },
     todo: {
       alias: "t",
@@ -63,7 +64,7 @@ yargs.command({
   },
   handler: function (argv) {
     const data = loadData();
-    let newToDo = { id: data.length,todo: argv.todo, status: argv.status };
+    let newToDo = { id: data.length, todo: argv.todo, status: argv.status };
     data.push(newToDo);
     saveData(data);
   },
@@ -75,10 +76,11 @@ yargs.command({
   handler: function (todo, status) {
     const data = loadData();
     console.log("Listing to do");
-    data.forEach(({ todo, status }) => {
+    data.forEach(({ id, todo, status }) => {
       if (status === false) {
         console.log(
           chalk.red(`
+        #${id + 1}
         todo: ${todo}
         status: Incomplete
     `)
@@ -86,12 +88,31 @@ yargs.command({
       } else
         console.log(
           chalk.green(`
+        #${id + 1}
         todo: ${todo}
         status: Complete
       `)
         );
     });
   },
+});
+
+yargs.command({
+    command: "toggle",
+    describe: "Toggle Incomplete/ Complete at a specific ID number",
+    handler: () => {
+        const data = loadData();
+        let x = process.argv[3]
+        for (let i = 0; i < data.length; i++) {
+            if (x == data[i].id + 1) {
+                data[i].status = !data[i].status;
+                // console.log("Gotcha!")
+            }
+            // console.log(data[i].id)
+            // console.log("X is", x)
+        }
+        saveData(data)
+    }
 });
 
 yargs.parse();
