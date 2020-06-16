@@ -76,24 +76,53 @@ yargs.command({
   handler: function (todo, status) {
     const data = loadData();
     console.log("Listing to do");
-    data.forEach(({ id, todo, status }) => {
-      if (status === false) {
-        console.log(
-          chalk.red(`
+    let x = process.argv[3] || null;
+    if (x == null) {
+      data.forEach(({ id, todo, status }) => {
+        if (status === false) {
+          console.log(
+            chalk.red(`
         #${id + 1}
         todo: ${todo}
         status: Incomplete
     `)
-        );
-      } else
-        console.log(
-          chalk.green(`
+          );
+        } else
+          console.log(
+            chalk.green(`
         #${id + 1}
         todo: ${todo}
         status: Complete
       `)
-        );
-    });
+          );
+      });
+    }
+    if (x == "incomplete") {
+      data.forEach(({ id, todo, status }) => {
+        if (status === false) {
+          console.log(
+            chalk.red(`
+          #${id + 1}
+          todo: ${todo}
+          status: Incomplete
+      `)
+          );
+        }
+      });
+    }
+    if (x == "complete") {
+      data.forEach(({ id, todo, status }) => {
+        if (status === true) {
+          console.log(
+            chalk.green(`
+          #${id + 1}
+          todo: ${todo}
+          status: Complete
+        `)
+          );
+        }
+      });
+    }
   },
 });
 
@@ -129,18 +158,26 @@ yargs.command({
     const data = loadData();
     let x = process.argv[3];
     if (x) {
-      for (let i = 0; i < data.length;i++) {
+      for (let i = 0; i < data.length; i++) {
         if (x == data[i].id + 1) {
-          
-          for ( let j = i; j < data.length; j++) {
-            data[j].id--
+          for (let j = i; j < data.length; j++) {
+            data[j].id--;
           }
-          data.splice(i, 1)
+          data.splice(i, 1);
         }
       }
     }
-    saveData(data)
-  }
-})
+    saveData(data);
+  },
+});
+
+yargs.command({
+  command: "delete_all",
+  describe: "Delete ALL of the to do things",
+  handler: () => {
+    const data = [];
+    saveData(data);
+  },
+});
 
 yargs.parse();

@@ -1,1 +1,27 @@
-[{"id":0,"todo":"Testing 1","status":false},{"id":1,"todo":"Testing 4","status":false},{"id":2,"todo":"Testing 5","status":true}]
+[
+    {
+        "id": 0,
+        "todo": "To do 1",
+        "status": false
+    },
+    {
+        "id": 1,
+        "todo": "To do 2",
+        "status": false
+    },
+    {
+        "id": 2,
+        "todo": "To do 3",
+        "status": false
+    },
+    {
+        "id": 3,
+        "todo": "To do 4",
+        "status": true
+    },
+    {
+        "id": 4,
+        "todo": "To do 5",
+        "status": true
+    }
+]
